@@ -354,6 +354,32 @@ namespace VidyoConnector
             mConnector.DisableDebug();
         }
 
+        private void AssertRemoteCamera(RemoteCamera camera, Participant participant, String action)
+        {
+            if (camera == null)
+            {
+                throw new Exception("Remote camera was null at action: " + action);
+            }
+
+            if (participant == null)
+            {
+                throw new Exception("Remote participant was null at action: " + action);
+            }
+        }
+
+        private void AssertRemoteMic(RemoteMicrophone microphone, Participant participant, String action)
+        {
+            if (microphone == null)
+            {
+                throw new Exception("Remote microphone was null at action: " + action);
+            }
+
+            if (participant == null)
+            {
+                throw new Exception("Remote participant was null at action: " + action);
+            }
+        }
+
         /* Local camera callbacks */
 
         public void OnLocalCameraAdded(LocalCamera localCamera)
@@ -390,7 +416,9 @@ namespace VidyoConnector
 
         public void OnRemoteCameraAdded(RemoteCamera remoteCamera, Participant participant)
         {
+            AssertRemoteCamera(remoteCamera, participant, "Added");
             mLogger.Log("OnRemoteCameraAdded");
+            
             if (remoteCamera != null)
             {
                 this.mActiveRemoteCamera = remoteCamera;
@@ -403,17 +431,34 @@ namespace VidyoConnector
 
         public void OnRemoteCameraRemoved(RemoteCamera remoteCamera, Participant participant)
         {
+            AssertRemoteCamera(remoteCamera, participant, "Removed");
             mLogger.Log("OnRemoteCameraRemoved");
+
             this.mActiveRemoteCamera = null;
             Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
             {
-                RenderRemoteCamera();
+                ReleaseRemoteCamera();
             });
         }
 
         public void OnRemoteCameraStateUpdated(RemoteCamera remoteCamera, Participant participant, VidyoClient.Device.DeviceState state)
         {
             mLogger.Log("OnRemoteCameraStateUpdated");
+        }
+
+        public void OnRemoteMicrophoneAdded(RemoteMicrophone remoteMicrophone, Participant participant)
+        {
+            AssertRemoteMic(remoteMicrophone, participant, "Added");
+        }
+
+        public void OnRemoteMicrophoneRemoved(RemoteMicrophone remoteMicrophone, Participant participant)
+        {
+            AssertRemoteMic(remoteMicrophone, participant, "Removed");
+        }
+
+        public void OnRemoteMicrophoneStateUpdated(RemoteMicrophone remoteMicrophone, Participant participant, VidyoClient.Device.DeviceState state)
+        {
+
         }
 
         public void OnLocalMicrophoneAdded(LocalMicrophone localMicrophone)
@@ -452,21 +497,6 @@ namespace VidyoConnector
         }
 
         public void OnLocalSpeakerStateUpdated(LocalSpeaker localSpeaker, VidyoClient.Device.DeviceState state)
-        {
-
-        }
-
-        public void OnRemoteMicrophoneAdded(RemoteMicrophone remoteMicrophone, Participant participant)
-        {
-
-        }
-
-        public void OnRemoteMicrophoneRemoved(RemoteMicrophone remoteMicrophone, Participant participant)
-        {
-
-        }
-
-        public void OnRemoteMicrophoneStateUpdated(RemoteMicrophone remoteMicrophone, Participant participant, VidyoClient.Device.DeviceState state)
         {
 
         }
