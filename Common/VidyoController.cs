@@ -356,11 +356,6 @@ namespace VidyoConnector
 
         private void AssertRemoteCamera(RemoteCamera camera, Participant participant, String action)
         {
-            if (camera == null)
-            {
-                throw new Exception("Remote camera was null at action: " + action);
-            }
-
             if (participant == null)
             {
                 throw new Exception("Remote participant was null at action: " + action);
@@ -369,11 +364,6 @@ namespace VidyoConnector
 
         private void AssertRemoteMic(RemoteMicrophone microphone, Participant participant, String action)
         {
-            if (microphone == null)
-            {
-                throw new Exception("Remote microphone was null at action: " + action);
-            }
-
             if (participant == null)
             {
                 throw new Exception("Remote participant was null at action: " + action);
